@@ -6,19 +6,25 @@ defaults:
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [master]
   pull_request:
-    branches: [ "master" ]
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: make all
-      run: make all
-    - name: make check
-      run: make check
-    - name: make leak-test
-      run: make leak-test
+      - uses: actions/checkout@v4
+      - name: Build debug
+        run: make debug
+      - name: Build release
+        run: make release
+      - name: Build tests
+        run: make test
+      - name: Build sanitizer tests
+        run: make debug-test
+      - name: Run tests
+        run: make check
+      - name: Run sanitizer tests
+        run: make leak-test
